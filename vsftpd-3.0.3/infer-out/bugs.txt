@@ -1,0 +1,128 @@
+Found 15 issues
+
+filestr.c:34: error: NULL_DEREFERENCE
+  pointer `&p_stat` last assigned on line 26 could be null and is dereferenced by call to `vsf_sysutil_fstat()` at line 34, column 3.
+  32.       return fd;
+  33.     }
+  34. >   vsf_sysutil_fstat(fd, &p_stat);
+  35.     if (vsf_sysutil_statbuf_is_regfile(p_stat))
+  36.     {
+
+sysstr.c:33: error: MEMORY_LEAK
+  memory dynamically allocated by call to `str_empty()` at line 29, column 3 is not reachable after line 33, column 5.
+  31.     if (p_ret != 0)
+  32.     {
+  33. >     str_alloc_text(p_str, p_getcwd_buf);
+  34.     }
+  35.   }
+
+standalone.c:40: error: DEAD_STORE
+  The value written to &listen_sock (type int) is never used.
+  38.   {
+  39.     struct vsf_sysutil_sockaddr* p_accept_addr = 0;
+  40. >   int listen_sock = -1;
+  41.     int retval;
+  42.     s_ipaddr_size = vsf_sysutil_get_ipaddr_size();
+
+privops.c:188: error: UNINITIALIZED_VALUE
+  The value read from the_port was never initialized.
+  186.       die("vsf_sysutil_bind");
+  187.     }
+  188. >   return the_port;
+  189.   }
+  190.   
+
+sysstr.c:142: error: MEMORY_LEAK
+  memory dynamically allocated by call to `str_empty()` at line 139, column 3 is not reachable after line 142, column 5.
+  140.     if (p_filename != 0)
+  141.     {
+  142. >     str_alloc_text(p_filename_str, p_filename);
+  143.     }
+  144.   }
+
+logging.c:198: error: MEMORY_LEAK
+  memory dynamically allocated by call to `str_append_ulong()` at line 197, column 3 is not reachable after line 198, column 3.
+  196.     }
+  197.     str_append_ulong(p_str, (unsigned long) delta_sec);
+  198. >   str_append_char(p_str, ' ');
+  199.     /* Remote host name */
+  200.     str_append_str(p_str, &p_sess->remote_ip_str);
+
+main.c:273: error: NULL_DEREFERENCE
+  pointer `&p_statbuf` last assigned on line 272 could be null and is dereferenced by call to `vsf_sysutil_fstat()` at line 273, column 5.
+  271.     {
+  272.       struct vsf_sysutil_statbuf* p_statbuf = 0;
+  273. >     vsf_sysutil_fstat(VSFTP_COMMAND_FD, &p_statbuf);
+  274.       if (!vsf_sysutil_statbuf_is_socket(p_statbuf))
+  275.       {
+
+privops.c:327: error: DEAD_STORE
+  The value written to &result (type int) is never used.
+  325.     }
+  326.     {
+  327. >     enum EVSFPrivopLoginResult result = kVSFLoginFail;
+  328.       if (anonymous_login)
+  329.       {
+
+twoprocess.c:318: error: MEMORY_LEAK
+  memory dynamically allocated by call to `priv_sock_get_str()` at line 309, column 5 is not reachable after line 318, column 22.
+  316.         p_sess->data_use_ssl = 0;
+  317.       }
+  318. >     e_login_result = vsf_privop_do_login(p_sess, &password_str);
+  319.       str_free(&password_str);
+  320.     }
+
+str.c:324: error: MEMORY_LEAK
+  memory dynamically allocated to `s_tmp_str.p_buf` by call to `str_empty()` at line 321, column 3 is not reachable after line 324, column 5.
+  322.     while (to_pad--)
+  323.     {
+  324. >     str_append_char(&s_tmp_str, ' ');
+  325.     }
+  326.     str_append_str(&s_tmp_str, p_str);
+
+privops.c:403: error: MEMORY_LEAK
+  memory dynamically allocated to `prefix_str.p_buf` by call to `str_copy()` at line 402, column 5 is not reachable after line 403, column 5.
+  401.       struct mystr prefix_str = INIT_MYSTR;
+  402.       str_copy(&prefix_str, &p_sess->remote_ip_str);
+  403. >     str_append_char(&prefix_str, '/');
+  404.       str_append_str(&prefix_str, p_str);
+  405.       vsf_sysutil_set_proctitle_prefix(&prefix_str);
+
+sysdeputil.c:700: error: UNINITIALIZED_VALUE
+  The value read from error was never initialized.
+  698.     enum EVSFSysUtilError error;
+  699.     (void) start_pos;
+  700. >   (void) error;
+  701.   #if defined(VSF_SYSDEP_HAVE_LINUX_SENDFILE) || \
+  702.       defined(VSF_SYSDEP_HAVE_FREEBSD_SENDFILE) || \
+
+postlogin.c:1376: error: MEMORY_LEAK
+  memory dynamically allocated to `s_tmp_str.p_buf` by call to `str_empty()` at line 1368, column 3 is not reachable after line 1376, column 7.
+  1374.           str_get_char_at(&s_tmp_str, str_getlen(&s_tmp_str) - 1) != '/')
+  1375.       {
+  1376. >       str_append_char(&s_tmp_str, '/');
+  1377.       }
+  1378.     }
+
+postlogin.c:1813: error: MEMORY_LEAK
+  memory dynamically allocated by call to `str_copy()` at line 1812, column 5 is not reachable after line 1813, column 5.
+  1811.     {
+  1812.       str_copy(p_outstr, p_real_base_str);
+  1813. >     str_append_char(p_outstr, '.');
+  1814.       str_append_ulong(p_outstr, suffix);
+  1815.       retval = str_stat(p_outstr, &s_p_statbuf);
+
+sysutil.c:2700: error: DEAD_STORE
+  The value written to &facility (type int) is never used.
+  2698.   vsf_sysutil_openlog(int force)
+  2699.   {
+  2700. >   int facility = LOG_DAEMON;
+  2701.     int option = LOG_PID;
+  2702.     if (!force)
+
+Summary of the reports
+
+          MEMORY_LEAK: 8
+           DEAD_STORE: 3
+  UNINITIALIZED_VALUE: 2
+     NULL_DEREFERENCE: 2
